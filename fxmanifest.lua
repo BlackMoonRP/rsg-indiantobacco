@@ -7,8 +7,7 @@ description 'rsg-indiantobacco'
 
 client_scripts {
     'client/client.lua',
-	'client/trader.lua',
-	'client/npc.lua',
+	'client/trader.lua'
 }
 
 server_scripts {

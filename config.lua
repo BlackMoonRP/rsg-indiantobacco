@@ -42,10 +42,4 @@ Config.IndianTraderLocations = {
 	
 }
 
--- indian trader npc spawn
-Config.IndianTraderNpc = {
-	
-	[1] =	{ ["Model"] = "CS_rainsfall", ["Pos"] = vector3(451.8908, 2237.673, 247.85261 -1), ["Heading"] = 233.12988 }, --indian reserve
-	
-}
 -- end indian trader settings
