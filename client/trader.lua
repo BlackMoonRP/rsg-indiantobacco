@@ -13,8 +13,21 @@ Citizen.CreateThread(function()
             local IndianTraderBlip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, v.coords)
             SetBlipSprite(IndianTraderBlip, Config.Blip.blipSprite, 1)
             SetBlipScale(IndianTraderBlip, Config.Blip.blipScale)
-			Citizen.InvokeNative(0x9CB1A1623062F402, IndianTraderBlip, Config.Blip.blipName)
+            Citizen.InvokeNative(0x9CB1A1623062F402, IndianTraderBlip, Config.Blip.blipName)
         end
+    end
+end)
+
+-- draw marker if set to true in config
+CreateThread(function()
+    while true do
+        local sleep = 0
+        for indiantrader, v in pairs(Config.IndianTraderLocations) do
+            if v.showmarker == true then
+                Citizen.InvokeNative(0x2A32FAA57B937173, 0x07DCE236, v.coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 255, 215, 0, 155, false, false, false, 1, false, false, false)
+            end
+        end
+        Wait(sleep)
     end
 end)
 
@@ -30,8 +43,8 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
             txt = "trade 10 tobacco for 1 indian cigars",
             params = {
                 event = 'rsg-indiantrader:server:tradetobacco',
-				isServer = true,
-				args = {trade = 1}
+                isServer = true,
+                args = {trade = 1}
             }
         },
         {
@@ -39,8 +52,8 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
             txt = "trade 50 tobacco for 5 indian cigars",
             params = {
                 event = 'rsg-indiantrader:server:tradetobacco',
-				isServer = true,
-				args = {trade = 5}
+                isServer = true,
+                args = {trade = 5}
             }
         },
         {
@@ -48,8 +61,8 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
             txt = "trade 10 tobacco for 10 indian cigars",
             params = {
                 event = 'rsg-indiantrader:server:tradetobacco',
-				isServer = true,
-				args = {trade = 10}
+                isServer = true,
+                args = {trade = 10}
             }
         },
         {
@@ -57,8 +70,8 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
             txt = "buy indian trade items",
             params = {
                 event = 'rsg-indiantrader:client:OpenIndianShop',
-				isServer = false,
-				args = {}
+                isServer = false,
+                args = {}
             }
         },
         {

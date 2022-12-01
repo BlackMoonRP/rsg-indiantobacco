@@ -32,36 +32,36 @@ Citizen.CreateThread(function()
     for i = 1, #Config.Plants do
         local dist = GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Config.Plants[i].x, Config.Plants[i].y, Config.Plants[i].z, true)
 
-		if dist < 50.0 then
-			inRange = true
-			local hasSpawned = false
-			local needsUpgrade = false
-			local upgradeId = nil
-			local tableRemove = nil
+        if dist < 50.0 then
+            inRange = true
+            local hasSpawned = false
+            local needsUpgrade = false
+            local upgradeId = nil
+            local tableRemove = nil
 
-			for z = 1, #SpawnedPlants do
-				local p = SpawnedPlants[z]
-				if p.id == Config.Plants[i].id then
-					hasSpawned = true
-				end
-			end
+            for z = 1, #SpawnedPlants do
+                local p = SpawnedPlants[z]
+                if p.id == Config.Plants[i].id then
+                    hasSpawned = true
+                end
+            end
 
-			if not hasSpawned then
-				local hash = GetHashKey('indtobacco_p')
-				while not HasModelLoaded(hash) do
-					Wait(10)
-					RequestModel(hash)
-				end
-				RequestModel(hash)
-				local data = {}
-				data.id = Config.Plants[i].id
-				data.obj = CreateObject(hash, Config.Plants[i].x, Config.Plants[i].y, Config.Plants[i].z -1.2, false, false, false) 
-				SetEntityAsMissionEntity(data.obj, true)
-				FreezeEntityPosition(data.obj, true)
-				table.insert(SpawnedPlants, data)
-				hasSpawned = false
-			end
-		end
+            if not hasSpawned then
+                local hash = GetHashKey('indtobacco_p')
+                while not HasModelLoaded(hash) do
+                    Wait(10)
+                    RequestModel(hash)
+                end
+                RequestModel(hash)
+                local data = {}
+                data.id = Config.Plants[i].id
+                data.obj = CreateObject(hash, Config.Plants[i].x, Config.Plants[i].y, Config.Plants[i].z -1.2, false, false, false) 
+                SetEntityAsMissionEntity(data.obj, true)
+                FreezeEntityPosition(data.obj, true)
+                table.insert(SpawnedPlants, data)
+                hasSpawned = false
+            end
+        end
     end
     if not InRange then
         Wait(5000)
@@ -85,15 +85,15 @@ function DestroyPlant()
         local ped = PlayerPedId()
         isDoingAction = true
         TriggerServerEvent('rsg-indiantobacco:server:plantHasBeenHarvested', plant.id)
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_CROUCH_INSPECT`, 0, true)
-		Wait(5000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TriggerServerEvent('rsg-indiantobacco:server:destroyPlant', plant.id)
-		isDoingAction = false
-		canHarvest = true
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_CROUCH_INSPECT`, 0, true)
+        Wait(5000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TriggerServerEvent('rsg-indiantobacco:server:destroyPlant', plant.id)
+        isDoingAction = false
+        canHarvest = true
     else
-		QRCore.Functions.Notify('error', 'error')
+        QRCore.Functions.Notify('error', 'error')
     end
 end
 
@@ -113,15 +113,15 @@ function HarvestPlant()
         local ped = PlayerPedId()
         isDoingAction = true
         TriggerServerEvent('rsg-indiantobacco:server:plantHasBeenHarvested', plant.id)
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_CROUCH_INSPECT`, 0, true)
-		Wait(10000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TriggerServerEvent('rsg-indiantobacco:server:harvestPlant', plant.id)
-		isDoingAction = false
-		canHarvest = true
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_CROUCH_INSPECT`, 0, true)
+        Wait(10000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TriggerServerEvent('rsg-indiantobacco:server:harvestPlant', plant.id)
+        isDoingAction = false
+        canHarvest = true
     else
-		QRCore.Functions.Notify('error', 'error')
+        QRCore.Functions.Notify('error', 'error')
     end
 end
 
@@ -137,55 +137,55 @@ end
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-		local InRange = false
-		local ped = PlayerPedId()
-		local pos = GetEntityCoords(ped)
+        local InRange = false
+        local ped = PlayerPedId()
+        local pos = GetEntityCoords(ped)
 
-		for k, v in pairs(Config.Plants) do
-			if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, v.x, v.y, v.z, true) < 1.3 and not isDoingAction and not v.beingHarvested and not IsPedInAnyVehicle(PlayerPedId(), false) then
-				if PlayerJob.name == 'police' then
-					local plant = GetClosestPlant()
-					DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
-					DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
-					DrawText3D(v.x, v.y, v.z - 0.36, 'Destroy Plant [G]')
-					if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
-						if v.id == plant.id then
-							DestroyPlant()
-						end
-					end
-				else
-					if v.growth < 100 then
-						local plant = GetClosestPlant()
-						DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
-						DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
-						DrawText3D(v.x, v.y, v.z - 0.36, 'Water [G] : Feed [J]')
-						if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
-							if v.id == plant.id then
-								TriggerEvent('rsg-indiantobacco:client:waterPlant')
-							end
-						elseif IsControlJustPressed(0, QRCore.Shared.Keybinds['J']) then
-							if v.id == plant.id then
-								TriggerEvent('rsg-indiantobacco:client:feedPlant')
-							end
-						end
-					else
-						DrawText3D(v.x, v.y, v.z, '[Quality: ' .. v.quality .. ']')
-						DrawText3D(v.x, v.y, v.z - 0.18, 'Harvest [E]')
-						if IsControlJustReleased(0, QRCore.Shared.Keybinds['E']) and canHarvest then
-							local plant = GetClosestPlant()
-							local callpolice = math.random(1,100)
-							if v.id == plant.id then
-								HarvestPlant()
-								if callpolice > 95 then
-									local coords = GetEntityCoords(PlayerPedId())
-									-- alert police action here
-								end
-							end
-						end
-					end
-				end
-			end
-		end
+        for k, v in pairs(Config.Plants) do
+            if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, v.x, v.y, v.z, true) < 1.3 and not isDoingAction and not v.beingHarvested and not IsPedInAnyVehicle(PlayerPedId(), false) then
+                if PlayerJob.name == 'police' then
+                    local plant = GetClosestPlant()
+                    DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
+                    DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
+                    DrawText3D(v.x, v.y, v.z - 0.36, 'Destroy Plant [G]')
+                    if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
+                        if v.id == plant.id then
+                            DestroyPlant()
+                        end
+                    end
+                else
+                    if v.growth < 100 then
+                        local plant = GetClosestPlant()
+                        DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
+                        DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
+                        DrawText3D(v.x, v.y, v.z - 0.36, 'Water [G] : Feed [J]')
+                        if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
+                            if v.id == plant.id then
+                                TriggerEvent('rsg-indiantobacco:client:waterPlant')
+                            end
+                        elseif IsControlJustPressed(0, QRCore.Shared.Keybinds['J']) then
+                            if v.id == plant.id then
+                                TriggerEvent('rsg-indiantobacco:client:feedPlant')
+                            end
+                        end
+                    else
+                        DrawText3D(v.x, v.y, v.z, '[Quality: ' .. v.quality .. ']')
+                        DrawText3D(v.x, v.y, v.z - 0.18, 'Harvest [E]')
+                        if IsControlJustReleased(0, QRCore.Shared.Keybinds['E']) and canHarvest then
+                            local plant = GetClosestPlant()
+                            local callpolice = math.random(1,100)
+                            if v.id == plant.id then
+                                HarvestPlant()
+                                if callpolice > 95 then
+                                    local coords = GetEntityCoords(PlayerPedId())
+                                    -- alert police action here
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
     end
 end)
 
@@ -228,20 +228,20 @@ AddEventHandler('rsg-indiantobacco:client:waterPlant', function()
             entity = v.obj
         end
     end
-	local hasItem = QRCore.Functions.HasItem('water', 1)
-	if hasItem then
-		Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_BUCKET_POUR_LOW`, 0, true)
-		Wait(10000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TriggerServerEvent('rsg-indiantobacco:server:waterPlant', plant.id)
-		isDoingAction = false
-	else
-		QRCore.Functions.Notify('You don\'t have any water!', 'error')
-		Wait(5000)
-		isDoingAction = false
-	end
+    local hasItem = QRCore.Functions.HasItem('water', 1)
+    if hasItem then
+        Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_BUCKET_POUR_LOW`, 0, true)
+        Wait(10000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TriggerServerEvent('rsg-indiantobacco:server:waterPlant', plant.id)
+        isDoingAction = false
+    else
+        QRCore.Functions.Notify('You don\'t have any water!', 'error')
+        Wait(5000)
+        isDoingAction = false
+    end
 end)
 
 -- feed plants
@@ -256,20 +256,20 @@ AddEventHandler('rsg-indiantobacco:client:feedPlant', function()
             entity = v.obj
         end
     end
-	local hasItem = QRCore.Functions.HasItem('fertilizer', 1)
-	if hasItem then
-		Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FEED_PIGS`, 0, true)
-		Wait(14000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TriggerServerEvent('rsg-indiantobacco:server:feedPlant', plant.id)
-		isDoingAction = false
-	else
-		QRCore.Functions.Notify('You don\'t have any fertilizer!', 'error')
-		Wait(5000)
-		isDoingAction = false
-	end
+    local hasItem = QRCore.Functions.HasItem('fertilizer', 1)
+    if hasItem then
+        Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FEED_PIGS`, 0, true)
+        Wait(14000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TriggerServerEvent('rsg-indiantobacco:server:feedPlant', plant.id)
+        isDoingAction = false
+    else
+        QRCore.Functions.Notify('You don\'t have any fertilizer!', 'error')
+        Wait(5000)
+        isDoingAction = false
+    end
 end)
 
 RegisterNetEvent('rsg-indiantobacco:client:updatePlantData')
@@ -280,19 +280,19 @@ end)
 RegisterNetEvent('rsg-indiantobacco:client:plantNewSeed')
 AddEventHandler('rsg-indiantobacco:client:plantNewSeed', function(type)
     local pos = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 1.0, 0.0)
-	local ped = PlayerPedId()
+    local ped = PlayerPedId()
     if CanPlantSeedHere(pos) and not IsPedInAnyVehicle(PlayerPedId(), false) then
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FARMER_RAKE`, 0, true)
-		Wait(10000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FARMER_WEEDING`, 0, true)
-		Wait(20000)
-		ClearPedTasks(ped)
-		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-		TriggerServerEvent('rsg-indiantobacco:server:plantNewSeed', type, pos)
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FARMER_RAKE`, 0, true)
+        Wait(10000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FARMER_WEEDING`, 0, true)
+        Wait(20000)
+        ClearPedTasks(ped)
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        TriggerServerEvent('rsg-indiantobacco:server:plantNewSeed', type, pos)
     else
-		QRCore.Functions.Notify('too close to another plant!', 'error')
+        QRCore.Functions.Notify('too close to another plant!', 'error')
     end
 end)
 
@@ -349,19 +349,19 @@ AddEventHandler('rsg-indiantobacco:client:SmokeIndian', function()
     ClearPedTasks(PlayerPedId())
     DeleteObject(tempObj2)
     SetModelAsNoLongerNeeded(prop)
-	-- fill up cores
-	Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 0, 100) -- ATTRIBUTE_CORE_HEALTH
-	Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 1, 100) -- ATTRIBUTE_CORE_STAMINA
-	EnableAttributeOverpower(playerPed, 0, 900.0) -- 3x
-	EnableAttributeOverpower(playerPed, 1, 900.0) -- 3x
-	Citizen.InvokeNative(0xF6A7C08DF2E28B28, playerPed, 0, 900.0) -- ATTRIBUTE_CORE_HEALTH
-	Citizen.InvokeNative(0xF6A7C08DF2E28B28, playerPed, 1, 900.0) -- ATTRIBUTE_CORE_STAMINA
-	-- play core fillup sound
-	PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-	-- do drug effect (optional true or false)
-	if Config.DrugEffect == true then
-		AnimpostfxPlay("MP_MoonshineToxic") -- start screen effect
-		Wait(Config.DrugEffectTime) -- drug effect time
-		AnimpostfxStop("MP_MoonshineToxic") -- stop screen effect
-	end
+    -- fill up cores
+    Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 0, 100) -- ATTRIBUTE_CORE_HEALTH
+    Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 1, 100) -- ATTRIBUTE_CORE_STAMINA
+    EnableAttributeOverpower(playerPed, 0, 900.0) -- 3x
+    EnableAttributeOverpower(playerPed, 1, 900.0) -- 3x
+    Citizen.InvokeNative(0xF6A7C08DF2E28B28, playerPed, 0, 900.0) -- ATTRIBUTE_CORE_HEALTH
+    Citizen.InvokeNative(0xF6A7C08DF2E28B28, playerPed, 1, 900.0) -- ATTRIBUTE_CORE_STAMINA
+    -- play core fillup sound
+    PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    -- do drug effect (optional true or false)
+    if Config.DrugEffect == true then
+        AnimpostfxPlay("MP_MoonshineToxic") -- start screen effect
+        Wait(Config.DrugEffectTime) -- drug effect time
+        AnimpostfxStop("MP_MoonshineToxic") -- stop screen effect
+    end
 end)

@@ -31,15 +31,15 @@ Config.Blip = {
 -- indian trader shop
 Config.IndianTraderShop = {
 
-	[1] =	{ name = "indtobaccoseed",	price = 10,	amount = 50,	info = {},	type = "item",	slot = 1, },
+    [1] = { name = "indtobaccoseed", price = 10, amount = 50, info = {}, type = "item",	slot = 1, },
 
 }
 
 -- indian trader prompt locations
 Config.IndianTraderLocations = {
 
-	{name = 'Indian Trader', location = 'indiantrader-1', 	coords = vector3(451.8908, 2237.673, 247.85261), 	showblip = true}, --indian reserve
-	
+    {name = 'Indian Trader', location = 'indiantrader-1', coords = vector3(451.8908, 2237.673, 247.85261), showblip = true, showmarker = true}, --indian reserve
+
 }
 
 -- end indian trader settings
