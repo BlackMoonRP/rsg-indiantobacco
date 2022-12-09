@@ -349,6 +349,7 @@ AddEventHandler('rsg-indiantobacco:client:SmokeIndian', function()
     ClearPedTasks(PlayerPedId())
     DeleteObject(tempObj2)
     SetModelAsNoLongerNeeded(prop)
+    TriggerServerEvent('rsg-indiantobacco:server:removeitem', 'indiancigar', 1)
     -- fill up cores
     Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 0, 100) -- ATTRIBUTE_CORE_HEALTH
     Citizen.InvokeNative(0xC6258F41D86676E0, playerPed, 1, 100) -- ATTRIBUTE_CORE_STAMINA

@@ -7,14 +7,14 @@ description 'rsg-indiantobacco'
 
 client_scripts {
     'client/client.lua',
-	'client/trader.lua'
+    'client/trader.lua'
 }
 
 server_scripts {
     'server/server.lua',
-	'@oxmysql/lib/MySQL.lua',
+    '@oxmysql/lib/MySQL.lua',
 }
 
 shared_scripts { 
-	'config.lua',
+    'config.lua',
 }
