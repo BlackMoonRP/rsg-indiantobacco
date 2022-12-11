@@ -67,7 +67,8 @@ AddEventHandler('rsg-indiantobacco:server:plantNewSeed', function(type, location
         quality = 100.0, 
         grace = true, 
         beingHarvested = false, 
-        planter = Player.PlayerData.citizenid
+        planter = Player.PlayerData.citizenid,
+        planttime = os.time(),
     }
 
     local PlantCount = 0
@@ -309,6 +310,14 @@ Citizen.CreateThread(function()
                     if Config.Plants[i].thirst < 75 or Config.Plants[i].hunger < 75 then
                         Config.Plants[i].quality = Config.Plants[i].quality - 1
                     end
+                end
+            else
+                local untildead = Config.Plants[i].planttime + Config.DeadPlantTime
+                local currenttime = os.time()
+                if currenttime > untildead then
+                    deadid = Config.Plants[i].id
+                    print('Removing Dead Plant with ID '..deadid)
+                    TriggerEvent('rsg-indiantobacco:server:PlantRemoved', deadid)
                 end
             end
             TriggerEvent('rsg-indiantobacco:server:updateIndianPlants', Config.Plants[i].id, Config.Plants[i])
