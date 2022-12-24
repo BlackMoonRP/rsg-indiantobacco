@@ -1,19 +1,19 @@
-local QRCore = exports['qr-core']:GetCoreObject()
+local RSGCore = exports['rsg-core']:GetCoreObject()
 local PlantsLoaded = false
 
 -- use seed
-QRCore.Functions.CreateUseableItem("indtobaccoseed", function(source, item)
+RSGCore.Functions.CreateUseableItem("indtobaccoseed", function(source, item)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     TriggerClientEvent('rsg-indiantobacco:client:plantNewSeed', src, 'indtobacco')
     Player.Functions.RemoveItem('indtobaccoseed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobaccoseed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobaccoseed'], "remove")
 end)
 
 -- use indian cigar
-QRCore.Functions.CreateUseableItem("indiancigar", function(source, item)
+RSGCore.Functions.CreateUseableItem("indiancigar", function(source, item)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     TriggerClientEvent('rsg-indiantobacco:client:SmokeIndian', src)
 end)
 
@@ -44,9 +44,9 @@ end)
 RegisterServerEvent('rsg-indiantobacco:server:giveSeed')
 AddEventHandler('rsg-indiantobacco:server:giveSeed', function()
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     Player.Functions.AddItem('indtobaccoseed', math.random(1, 2))
-    TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobaccoseed'], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobaccoseed'], "add")
 end)
 
 -- plant seed
@@ -54,7 +54,7 @@ RegisterServerEvent('rsg-indiantobacco:server:plantNewSeed')
 AddEventHandler('rsg-indiantobacco:server:plantNewSeed', function(type, location)
     local src = source
     local plantId = math.random(111111, 999999)
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local SeedData = {
         id = plantId, 
         type = type, 
@@ -80,7 +80,7 @@ AddEventHandler('rsg-indiantobacco:server:plantNewSeed', function(type, location
     end
 
     if PlantCount >= Config.MaxPlantCount then
-        TriggerClientEvent('QRCore:Notify', src, 'You already have ' .. Config.MaxPlantCount .. ' plants down', 'error')
+        TriggerClientEvent('RSGCore:Notify', src, 'You already have ' .. Config.MaxPlantCount .. ' plants down', 'error')
     else
         table.insert(Config.Plants, SeedData)
         TriggerEvent('rsg-indiantobacco:server:savePlant', SeedData, plantId)
@@ -103,7 +103,7 @@ end)
 RegisterServerEvent('rsg-indiantobacco:server:destroyPlant')
 AddEventHandler('rsg-indiantobacco:server:destroyPlant', function(plantId)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
             table.remove(Config.Plants, k)
@@ -112,14 +112,14 @@ AddEventHandler('rsg-indiantobacco:server:destroyPlant', function(plantId)
     TriggerClientEvent('rsg-indiantobacco:client:removePlantObject', src, plantId)
     TriggerEvent('rsg-indiantobacco:server:PlantRemoved', plantId)
     TriggerEvent('rsg-indiantobacco:server:updatePlants')
-    TriggerClientEvent('QRCore:Notify', src, 'you distroyed the plant', 'success')
+    TriggerClientEvent('RSGCore:Notify', src, 'you distroyed the plant', 'success')
 end)
 
 -- harvest plant
 RegisterServerEvent('rsg-indiantobacco:server:harvestPlant')
 AddEventHandler('rsg-indiantobacco:server:harvestPlant', function(plantId)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local amount
     local label
     local item
@@ -154,26 +154,26 @@ AddEventHandler('rsg-indiantobacco:server:harvestPlant', function(plantId)
         if poorQuality then
             local pooramount = math.random(1,3)
             Player.Functions.AddItem('indtobacco', pooramount)
-            TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "add")
-            TriggerClientEvent('QRCore:Notify', src, 'You harvest '.. pooramount ..' Indian Tobacco', 'success')
+            TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "add")
+            TriggerClientEvent('RSGCore:Notify', src, 'You harvest '.. pooramount ..' Indian Tobacco', 'success')
             Player.Functions.SetMetaData("dealerrep", Player.PlayerData.metadata["dealerrep"] + pooramount)
             Wait(5000)
             TriggerEvent('rsg-indiantobacco:server:dealerrep', src)
         elseif goodQuality then
             local goodamount = math.random(3,6)
             Player.Functions.AddItem('indtobacco', goodamount)
-            TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "add")
-            TriggerClientEvent('QRCore:Notify', src, 'You harvest '.. goodamount ..' Indian Tobacco', 'success')
+            TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "add")
+            TriggerClientEvent('RSGCore:Notify', src, 'You harvest '.. goodamount ..' Indian Tobacco', 'success')
             Player.Functions.SetMetaData("dealerrep", Player.PlayerData.metadata["dealerrep"] + goodamount)
             Wait(5000)
             TriggerEvent('rsg-indiantobacco:server:dealerrep', src)
         elseif exellentQuality then
             local exellentamount = math.random(6,12)
             Player.Functions.AddItem('indtobacco', exellentamount)
-            TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "add")
+            TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "add")
             Player.Functions.AddItem('indtobaccoseed', 1)
-            TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobaccoseed'], "add")
-            TriggerClientEvent('QRCore:Notify', src, 'You harvest '.. exellentamount ..' Indian Tobacco', 'success')
+            TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobaccoseed'], "add")
+            TriggerClientEvent('RSGCore:Notify', src, 'You harvest '.. exellentamount ..' Indian Tobacco', 'success')
             Player.Functions.SetMetaData("dealerrep", Player.PlayerData.metadata["dealerrep"] + exellentamount)
             Wait(5000)
             TriggerEvent('rsg-indiantobacco:server:dealerrep', src)
@@ -196,7 +196,7 @@ end)
 RegisterServerEvent('rsg-indiantobacco:server:waterPlant')
 AddEventHandler('rsg-indiantobacco:server:waterPlant', function(plantId)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
             Config.Plants[k].thirst = Config.Plants[k].thirst + Config.ThirstIncrease
@@ -206,7 +206,7 @@ AddEventHandler('rsg-indiantobacco:server:waterPlant', function(plantId)
         end
     end
     Player.Functions.RemoveItem('water', 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['water'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['water'], "remove")
     TriggerEvent('rsg-indiantobacco:server:updatePlants')
 end)
 
@@ -214,7 +214,7 @@ end)
 RegisterServerEvent('rsg-indiantobacco:server:feedPlant')
 AddEventHandler('rsg-indiantobacco:server:feedPlant', function(plantId)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
             Config.Plants[k].hunger = Config.Plants[k].hunger + Config.HungerIncrease
@@ -224,7 +224,7 @@ AddEventHandler('rsg-indiantobacco:server:feedPlant', function(plantId)
         end
     end
     Player.Functions.RemoveItem('fertilizer', 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['fertilizer'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['fertilizer'], "remove")
     TriggerEvent('rsg-indiantobacco:server:updatePlants')
 end)
 
@@ -327,27 +327,27 @@ Citizen.CreateThread(function()
 end)
 
 -- check your dealer reputation
-QRCore.Commands.Add("dealerrep", "check your dealer reputation ", {}, false, function(source)
+RSGCore.Commands.Add("dealerrep", "check your dealer reputation ", {}, false, function(source)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local curRep = Player.PlayerData.metadata["dealerrep"]
-    TriggerClientEvent('QRCore:Notify', src, 'Your dealer reputation is '.. curRep, 'primary')
+    TriggerClientEvent('RSGCore:Notify', src, 'Your dealer reputation is '.. curRep, 'primary')
 end)
 
 -- used by harvest to show new dealer reputation
 RegisterServerEvent('rsg-indiantobacco:server:dealerrep')
 AddEventHandler('rsg-indiantobacco:server:dealerrep', function(source)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local curRep = Player.PlayerData.metadata["dealerrep"]
-    TriggerClientEvent('QRCore:Notify', src, 'Your dealer reputation increased to '.. curRep, 'primary')
+    TriggerClientEvent('RSGCore:Notify', src, 'Your dealer reputation increased to '.. curRep, 'primary')
 end)
 
 -- trade tobacco
 RegisterServerEvent('rsg-indiantrader:server:tradetobacco')
 AddEventHandler('rsg-indiantrader:server:tradetobacco', function(data) -- 1 / 5 / 10
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local checktobacco = Player.Functions.GetItemByName("indtobacco")
     local trade = data.trade
     if checktobacco ~= nil then
@@ -356,35 +356,35 @@ AddEventHandler('rsg-indiantrader:server:tradetobacco', function(data) -- 1 / 5 
         if trade == 1 then
             if playerindiantobacco >= 10 then
                 Player.Functions.RemoveItem('indtobacco', 10)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "remove")
                 Player.Functions.AddItem('indiancigar', 1)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indiancigar'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indiancigar'], "remove")
             else
-                TriggerClientEvent('QRCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
+                TriggerClientEvent('RSGCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
             end
         elseif trade == 5 then
             if playerindiantobacco >= 50 then
                 Player.Functions.RemoveItem('indtobacco', 50)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "remove")
                 Player.Functions.AddItem('indiancigar', 5)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indiancigar'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indiancigar'], "remove")
             else
-                TriggerClientEvent('QRCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
+                TriggerClientEvent('RSGCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
             end
         elseif trade == 10 then
             if playerindiantobacco >= 100 then
                 Player.Functions.RemoveItem('indtobacco', 100)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indtobacco'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indtobacco'], "remove")
                 Player.Functions.AddItem('indiancigar', 10)
-                TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items['indiancigar'], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items['indiancigar'], "remove")
             else
-                TriggerClientEvent('QRCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
+                TriggerClientEvent('RSGCore:Notify', src, 'You don\'t have enough indian tobacco to do that!', 'error')
             end
         else
-            TriggerClientEvent('QRCore:Notify', src, 'not enough to complete the trade!', 'error')
+            TriggerClientEvent('RSGCore:Notify', src, 'not enough to complete the trade!', 'error')
         end
     else
-        TriggerClientEvent('QRCore:Notify', src, 'You do not have any indian tobacco!', 'error')
+        TriggerClientEvent('RSGCore:Notify', src, 'You do not have any indian tobacco!', 'error')
     end
 end)
 
@@ -392,7 +392,7 @@ end)
 RegisterServerEvent('rsg-indiantobacco:server:removeitem')
 AddEventHandler('rsg-indiantobacco:server:removeitem', function(item, amount)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     Player.Functions.RemoveItem(item, amount)
-    TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items[item], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[item], "remove")
 end)

@@ -1,10 +1,10 @@
-local QRCore = exports['qr-core']:GetCoreObject()
+local RSGCore = exports['rsg-core']:GetCoreObject()
 local indiantrader
 
 -- prompts
 Citizen.CreateThread(function()
     for indiantrader, v in pairs(Config.IndianTraderLocations) do
-        exports['qr-core']:createPrompt(v.location, v.coords, QRCore.Shared.Keybinds['J'], 'Open ' .. v.name, {
+        exports['rsg-core']:createPrompt(v.location, v.coords, RSGCore.Shared.Keybinds['J'], 'Open ' .. v.name, {
             type = 'client',
             event = 'rsg-indiantrader:client:openMenu',
             args = {},
@@ -33,7 +33,7 @@ end)
 
 -- outlaw menu
 RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
-    exports['qr-menu']:openMenu({
+    exports['rsg-menu']:openMenu({
         {
             header = "| Indian Trader Menu |",
             isMenuHeader = true,
@@ -78,7 +78,7 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
             header = "Close Menu",
             txt = '',
             params = {
-                event = 'qr-menu:closeMenu',
+                event = 'rsg-menu:closeMenu',
             }
         },
     })

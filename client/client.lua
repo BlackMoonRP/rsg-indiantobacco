@@ -1,16 +1,16 @@
-local QRCore = exports['qr-core']:GetCoreObject()
+local RSGCore = exports['rsg-core']:GetCoreObject()
 isLoggedIn = false
 local isBusy = false
 PlayerJob = {}
 
-RegisterNetEvent('QRCore:Client:OnPlayerLoaded')
-AddEventHandler('QRCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('RSGCore:Client:OnPlayerLoaded')
+AddEventHandler('RSGCore:Client:OnPlayerLoaded', function()
     isLoggedIn = true
-    PlayerJob = QRCore.Functions.GetPlayerData().job
+    PlayerJob = RSGCore.Functions.GetPlayerData().job
 end)
 
-RegisterNetEvent('QRCore:Client:OnJobUpdate')
-AddEventHandler('QRCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('RSGCore:Client:OnJobUpdate')
+AddEventHandler('RSGCore:Client:OnJobUpdate', function(JobInfo)
     PlayerJob = JobInfo
 end)
 
@@ -93,7 +93,7 @@ function DestroyPlant()
         isDoingAction = false
         canHarvest = true
     else
-        QRCore.Functions.Notify('error', 'error')
+        RSGCore.Functions.Notify('error', 'error')
     end
 end
 
@@ -121,7 +121,7 @@ function HarvestPlant()
         isDoingAction = false
         canHarvest = true
     else
-        QRCore.Functions.Notify('error', 'error')
+        RSGCore.Functions.Notify('error', 'error')
     end
 end
 
@@ -148,7 +148,7 @@ Citizen.CreateThread(function()
                     DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
                     DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
                     DrawText3D(v.x, v.y, v.z - 0.36, 'Destroy Plant [G]')
-                    if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
+                    if IsControlJustPressed(0, RSGCore.Shared.Keybinds['G']) then
                         if v.id == plant.id then
                             DestroyPlant()
                         end
@@ -159,11 +159,11 @@ Citizen.CreateThread(function()
                         DrawText3D(v.x, v.y, v.z, 'Thirst: ' .. v.thirst .. '% - Hunger: ' .. v.hunger .. '%')
                         DrawText3D(v.x, v.y, v.z - 0.18, 'Growth: ' ..  v.growth .. '% -  Quality: ' .. v.quality.. '%')
                         DrawText3D(v.x, v.y, v.z - 0.36, 'Water [G] : Feed [J]')
-                        if IsControlJustPressed(0, QRCore.Shared.Keybinds['G']) then
+                        if IsControlJustPressed(0, RSGCore.Shared.Keybinds['G']) then
                             if v.id == plant.id then
                                 TriggerEvent('rsg-indiantobacco:client:waterPlant')
                             end
-                        elseif IsControlJustPressed(0, QRCore.Shared.Keybinds['J']) then
+                        elseif IsControlJustPressed(0, RSGCore.Shared.Keybinds['J']) then
                             if v.id == plant.id then
                                 TriggerEvent('rsg-indiantobacco:client:feedPlant')
                             end
@@ -171,7 +171,7 @@ Citizen.CreateThread(function()
                     else
                         DrawText3D(v.x, v.y, v.z, '[Quality: ' .. v.quality .. ']')
                         DrawText3D(v.x, v.y, v.z - 0.18, 'Harvest [E]')
-                        if IsControlJustReleased(0, QRCore.Shared.Keybinds['E']) and canHarvest then
+                        if IsControlJustReleased(0, RSGCore.Shared.Keybinds['E']) and canHarvest then
                             local plant = GetClosestPlant()
                             local callpolice = math.random(1,100)
                             if v.id == plant.id then
@@ -228,7 +228,7 @@ AddEventHandler('rsg-indiantobacco:client:waterPlant', function()
             entity = v.obj
         end
     end
-    local hasItem = QRCore.Functions.HasItem('water', 1)
+    local hasItem = RSGCore.Functions.HasItem('water', 1)
     if hasItem then
         Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
         TaskStartScenarioInPlace(ped, `WORLD_HUMAN_BUCKET_POUR_LOW`, 0, true)
@@ -238,7 +238,7 @@ AddEventHandler('rsg-indiantobacco:client:waterPlant', function()
         TriggerServerEvent('rsg-indiantobacco:server:waterPlant', plant.id)
         isDoingAction = false
     else
-        QRCore.Functions.Notify('You don\'t have any water!', 'error')
+        RSGCore.Functions.Notify('You don\'t have any water!', 'error')
         Wait(5000)
         isDoingAction = false
     end
@@ -256,7 +256,7 @@ AddEventHandler('rsg-indiantobacco:client:feedPlant', function()
             entity = v.obj
         end
     end
-    local hasItem = QRCore.Functions.HasItem('fertilizer', 1)
+    local hasItem = RSGCore.Functions.HasItem('fertilizer', 1)
     if hasItem then
         Citizen.InvokeNative(0x5AD23D40115353AC, ped, entity, -1)
         TaskStartScenarioInPlace(ped, `WORLD_HUMAN_FEED_PIGS`, 0, true)
@@ -266,7 +266,7 @@ AddEventHandler('rsg-indiantobacco:client:feedPlant', function()
         TriggerServerEvent('rsg-indiantobacco:server:feedPlant', plant.id)
         isDoingAction = false
     else
-        QRCore.Functions.Notify('You don\'t have any fertilizer!', 'error')
+        RSGCore.Functions.Notify('You don\'t have any fertilizer!', 'error')
         Wait(5000)
         isDoingAction = false
     end
@@ -292,7 +292,7 @@ AddEventHandler('rsg-indiantobacco:client:plantNewSeed', function(type)
         SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
         TriggerServerEvent('rsg-indiantobacco:server:plantNewSeed', type, pos)
     else
-        QRCore.Functions.Notify('too close to another plant!', 'error')
+        RSGCore.Functions.Notify('too close to another plant!', 'error')
     end
 end)
 
