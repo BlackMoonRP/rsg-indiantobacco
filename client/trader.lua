@@ -31,57 +31,39 @@ CreateThread(function()
     end
 end)
 
--- outlaw menu
+-- indian trader menu
 RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
-    exports['rsg-menu']:openMenu({
+    lib.registerContext(
         {
-            header = "| Indian Trader Menu |",
-            isMenuHeader = true,
-        },
-        {
-            header = "Trade 10 Indian Tobacco",
-            txt = "trade 10 tobacco for 1 indian cigars",
-            params = {
-                event = 'rsg-indiantrader:server:tradetobacco',
-                isServer = true,
-                args = {trade = 1}
+            id = 'indiantrader_menu',
+            title = 'Indian Trader Menu',
+            position = 'top-right',
+            options = {
+                {
+                    title = 'Trade 10 Indian Tobacco',
+                    description = 'trade 10 tobacco for 1 indian cigars',
+                    icon = 'fa-solid fa-arrows-rotate',
+                    serverEvent = 'rsg-indiantrader:server:tradetobacco',
+                    args = {trade = 1}
+                },
+                {
+                    title = 'Trade 50 Indian Tobacco',
+                    description = 'trade 50 tobacco for 5 indian cigars',
+                    icon = 'fa-solid fa-arrows-rotate',
+                    serverEvent = 'rsg-indiantrader:server:tradetobacco',
+                    args = {trade = 5}
+                },
+                {
+                    title = 'Trade 100 Indian Tobacco',
+                    description = 'trade 10 tobacco for 10 indian cigars',
+                    icon = 'fa-solid fa-arrows-rotate',
+                    serverEvent = 'rsg-indiantrader:server:tradetobacco',
+                    args = {trade = 10}
+                },
             }
-        },
-        {
-            header = "Trade 50 Indian Tobacco",
-            txt = "trade 50 tobacco for 5 indian cigars",
-            params = {
-                event = 'rsg-indiantrader:server:tradetobacco',
-                isServer = true,
-                args = {trade = 5}
-            }
-        },
-        {
-            header = "Trade 100 Indian Tobacco",
-            txt = "trade 10 tobacco for 10 indian cigars",
-            params = {
-                event = 'rsg-indiantrader:server:tradetobacco',
-                isServer = true,
-                args = {trade = 10}
-            }
-        },
-        {
-            header = "Open Trader Shop",
-            txt = "buy indian trade items",
-            params = {
-                event = 'rsg-indiantrader:client:OpenIndianShop',
-                isServer = false,
-                args = {}
-            }
-        },
-        {
-            header = "Close Menu",
-            txt = '',
-            params = {
-                event = 'rsg-menu:closeMenu',
-            }
-        },
-    })
+        }
+    )
+    lib.showContext('indiantrader_menu')
 end)
 
 -- indian trader shop
