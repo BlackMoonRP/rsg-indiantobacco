@@ -60,6 +60,13 @@ RegisterNetEvent('rsg-indiantrader:client:openMenu', function(data)
                     serverEvent = 'rsg-indiantrader:server:tradetobacco',
                     args = {trade = 10}
                 },
+                {
+                    title = 'Trader Shop',
+                    description = 'open Indian Trader Shop',
+                    icon = 'fas fa-shopping-basket',
+                    event = 'rsg-indiantrader:client:OpenIndianShop',
+                    args = { }
+                },
             }
         }
     )
